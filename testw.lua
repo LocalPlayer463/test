@@ -7,7 +7,7 @@ local data = HttpService:JSONEncode({
     hwid = hwid
 })
 
-local response = syn.request({
+local response = request({
     Url = "http://localhost:3000/checkandupdate", -- เปลี่ยนเป็น URL ที่คุณโฮสต์ไว้
     Method = "POST",
     Headers = {
