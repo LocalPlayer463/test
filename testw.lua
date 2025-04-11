@@ -9,6 +9,7 @@ local response = game:HttpGet(url)
 local result = loadstring(response)
 if result then
     result() -- รันสคริปต์ที่ฝั่งเซิร์ฟเวอร์ส่งกลับมา
+    print "Yes"
 else
     warn("Invalid script from server")
 end
