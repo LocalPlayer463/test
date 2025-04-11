@@ -1,22 +1,20 @@
 local HttpService = game:GetService("HttpService")
-local hwid = game:GetService("RbxAnalyticsService"):GetClientId()
+
 local key = getgenv().Key
+local hwid = tostring(game:GetService("RbxAnalyticsService"):GetClientId())
 
-local data = HttpService:JSONEncode({
-    key = key,
-    hwid = hwid
-})
+local success, response = pcall(function()
+    return HttpService:PostAsync(
+        "http://localhost:3000/updatehwid",
+        HttpService:JSONEncode({ key = key, hwid = hwid }),
+        Enum.HttpContentType.ApplicationJson,
+        false
+    )
+end)
 
-local response = request({
-    Url = "http://localhost:3000/checkandupdate", -- หรือเปลี่ยนเป็น IP เครื่อง server
-    Method = "POST",
-    Headers = {
-        ["Content-Type"] = "application/json"
-    },
-    Body = data
-})
-
-print("[DEBUG] Server Response:")
-print(response.Body)
-
-loadstring(response.Body)()
+if success then
+    local data = HttpService:JSONDecode(response)
+    print("✅ Server Response: " .. data.message)
+else
+    warn("❌ HTTP Request Failed: " .. tostring(response))
+end
