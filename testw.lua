@@ -8,7 +8,7 @@ local data = HttpService:JSONEncode({
 })
 
 local response = request({
-    Url = "https://http://localhost:3000/checkandupdate",  -- ใช้ URL ที่ให้มา
+    Url = "https://localhost:3000/checkandupdate",  -- ใช้ URL ที่ให้มา
     Method = "POST",
     Headers = {
         ["Content-Type"] = "application/json"
