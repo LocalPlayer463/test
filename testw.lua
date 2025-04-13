@@ -8,7 +8,7 @@ local data = HttpService:JSONEncode({
 })
 
 local response = request({
-    Url = "https://localhost:3000/checkandupdate",  -- ใช้ URL ที่ให้มา
+    Url = "https://f43a-1-1-240-96.ngrok-free.app//checkandupdate",  -- ใช้ URL ที่ได้รับจาก Ngrok
     Method = "POST",
     Headers = {
         ["Content-Type"] = "application/json"
