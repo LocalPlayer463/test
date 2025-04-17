@@ -1,6 +1,14 @@
-const { Client, GatewayIntentBits, ActionRowBuilder, ButtonBuilder, ButtonStyle, ModalBuilder, TextInputBuilder, TextInputStyle, PermissionsBitField } = require('discord.js');
-const mysql = require('mysql2');
-const { token } = require('./config.json'); // ใส่ token ของคุณในไฟล์ config.json
+import { Client, GatewayIntentBits, ActionRowBuilder, ButtonBuilder, ButtonStyle, ModalBuilder, TextInputBuilder, TextInputStyle, PermissionsBitField, SlashCommandBuilder } from 'discord.js';
+import mysql from 'mysql2/promise';
+import express from 'express';
+import cors from 'cors';
+import fs from 'fs';
+
+// สร้าง instance ของ express
+const app = express();
+const port = process.env.PORT || 3000;
+
+const { token } = JSON.parse(fs.readFileSync('./config.json', 'utf-8')); // ใช้ fs เพื่อโหลดไฟล์ JSON
 // การตั้งค่าการเชื่อมต่อฐานข้อมูล MySQL
 const db = mysql.createPool({
   host: 'bbwxghpmlzumroydpyl5-mysql.services.clever-cloud.com',
@@ -643,8 +651,8 @@ else if (interaction.customId === 'redeem_modal') {
     }
 }
 });
-const { SlashCommandBuilder } = require('@discordjs/builders');
-const { CommandInteraction } = require('discord.js');
+// เปลี่ยนจาก require เป็น import
+
 
 // เมื่อ bot เริ่มต้น
 client.once('ready', () => {
@@ -1672,24 +1680,26 @@ client.on('interactionCreate', async (interaction) => {
 client.login(token);
 
 // index.js
-const express = require('express');
-const cors = require('cors');
-const app = express();
-const port = 3000;
 
 // เปิดให้ทุกโดเมนสามารถเข้าถึง API ได้
 app.use(cors());
 app.use(express.json());
-
 // จำลองการเชื่อมต่อฐานข้อมูล (ควรใช้ฐานข้อมูลจริงในโปรเจคจริง)
 // ตรวจสอบการเชื่อมต่อ
-db.connect((err) => {
-  if (err) {
-    console.error('Error connecting to the database:', err);
-    return;
+app.get('/data', async (req, res) => {
+  try {
+    const [rows, fields] = await db.execute('SELECT * FROM your_table');
+    res.send(rows);
+  } catch (err) {
+    res.status(500).send('Error connecting to the database: ' + err.message);
   }
-  console.log('Connected to MySQL database');
 });
+
+// Endpoint สำหรับเช็คว่าเว็บยังทำงานอยู่
+app.get('/', (req, res) => {
+  res.send('Bot is alive!');
+});
+
 
 app.post('/checkandupdate', (req, res) => {
   const { key, hwid } = req.body;
