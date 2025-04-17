@@ -154,11 +154,9 @@ client.on('interactionCreate', async (interaction) => {
       // ตัวอย่างการเชื่อมต่อกับฐานข้อมูลเมื่อปุ่มถูกกด
       db.getConnection((err, connection) => {
         if (err) {
-          console.error('Database connection error:', err);
+          console.error('Error getting connection from pool:', err);
           return;
         }
-
-        // คำสั่ง SQL ที่ต้องการ
         connection.query('SELECT * FROM your_table WHERE condition = ?', ['value'], (err, results) => {
           if (err) {
             console.error('Error executing query:', err);
@@ -167,7 +165,7 @@ client.on('interactionCreate', async (interaction) => {
           }
           connection.release();
         });
-      });
+      });      
     }
   }
   else if (interaction.customId === 'gentoken') {
@@ -1829,6 +1827,11 @@ app.post('/checkandupdate', (req, res) => {
     }
   });
 });
+
+app.get('/', (req, res) => {
+  res.send('Bot is alive!');
+});
+
 
 app.listen(port, '0.0.0.0', () => {
   console.log(`🚀 API server is running at http://0.0.0.0:${port}`);
