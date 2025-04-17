@@ -154,14 +154,16 @@ client.on('interactionCreate', async (interaction) => {
       // ตัวอย่างการเชื่อมต่อกับฐานข้อมูลเมื่อปุ่มถูกกด
       db.getConnection((err, connection) => {
         if (err) {
-          console.error('Error getting connection from pool:', err);
+          console.error('❌ Error getting connection from pool:', err);
           return;
         }
-        connection.query('SELECT * FROM your_table WHERE condition = ?', ['value'], (err, results) => {
+      
+        connection.query('SELECT * FROM `key_table` WHERE `key` = ?', [key], (err, results) => {
           if (err) {
-            console.error('Error executing query:', err);
+            console.error('❌ Error executing query:', err);
           } else {
-            console.log('Query results:', results);
+            console.log('✅ Query results:', results);
+            // ทำอะไรก็ได้กับ results ตรงนี้ เช่นตอบกลับ user
           }
           connection.release();
         });
